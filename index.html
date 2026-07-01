@@ -319,16 +319,16 @@ const PLAN={
  1:{dow:"LUN",label:"Empuje A",title:"Empuje A — Pecho",c:"#ff6b6b",icon:"barbell",
     ex:[ex("Press pecho máquina","Leverage_Chest_Press",4,"8-10","41 kg"),
         ex("Press inclinado mancuernas","Incline_Dumbbell_Press",3,"10-12","a probar"),
-        ex("Aperturas Pec Deck","Butterfly",3,"12","41 kg"),
-        ex("Press deltoides máquina","Leverage_Shoulder_Press",3,"10","23 kg"),
+        ex("Aperturas en máquina","Butterfly",3,"12","41 kg"),
+        ex("Laterales en polea o mancuerna","Side_Lateral_Raise",3,"12-15","12.5 kg"),
         ex("Extensión tríceps cuerda","Triceps_Pushdown_-_Rope_Attachment",3,"12","a probar")],
     extra:{t:"cardio",ic:"bike",txt:"<b>Cardio:</b> Bici 15 min ritmo moderado"}},
  2:{dow:"MAR",label:"Tirón A",title:"Tirón A — Espalda ancha",c:"#4ecdc4",icon:"stretching",
     ex:[ex("Jalón abierto","Wide-Grip_Lat_Pulldown",4,"8-10","52 kg"),
         ex("Remo en máquina","Seated_Cable_Rows",3,"10","45 kg"),
         ex("Pull over en polea alta","Rope_Straight-Arm_Pulldown",3,"12","41 kg"),
-        ex("Curl bíceps con barra","Barbell_Curl",3,"10","12.5 kg"),
-        ex("Face pull","Face_Pull",3,"15","36 kg")],
+        ex("Face pull","Face_Pull",3,"15","36 kg"),
+        ex("Curl bíceps con barra","Barbell_Curl",3,"10","12.5 kg")],
     extra:{t:"core",ic:"flame",txt:"<b>Core:</b> Plancha 3×40s · Twist ruso 3×20 · Elev. piernas 3×15"}},
  3:{dow:"MIÉ",label:"Piernas A",title:"Piernas A — Cuádriceps",c:"#a29bfe",icon:"run",
     ex:[ex("Sentadilla","Goblet_Squat",4,"8-10","20 kg c/lado"),
@@ -362,20 +362,23 @@ const PLAN={
 };
 const DOWFULL=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
 const NOTES=[
- ["Estructura diaria","5 min bici suave + movilidad → fuerza ~40 min → cardio/core ~15 min. Total ≤ 60 min."],
+ ["Estructura diaria","5 min bici suave + movilidad de hombros/cadera → fuerza ~40 min → cardio o core ~10-15 min. Total ≤ 60 min."],
+ ["Series de aproximación","Antes del primer ejercicio pesado del día (press, sentadilla, peso muerto, remo): 1-2 series livianas con la mitad del peso. A los 38 protege articulaciones."],
+ ["Tempo controlado","Bajá el peso en 2-3 s (fase excéntrica) sin impulso. Más músculo con menos peso y menos desgaste articular."],
  ["Descanso entre series","60-90 segundos. Domingo: descanso total (ideal caminata 30-45 min)."],
- ["Progresión","Cuando llegues al tope de reps en todas las series con buena técnica, subí 2.5-5 kg y volvé al rango bajo."],
- ["Intensidad","La última serie debería costarte. Si te sobran 4+ reps, falta peso."],
- ["⚠️ Sentadilla y peso muerto","Primeros 2 meses: NO al fallo. Dejá siempre 2 reps en reserva."],
+ ["Progresión","Cuando llegues al tope de reps en TODAS las series con buena técnica, subí 2.5-5 kg y volvé al rango bajo. La última serie debe costarte: si sobran 4+ reps, falta peso."],
+ ["Sentadilla y peso muerto","Primeros 2 meses: NO al fallo, dejá siempre 2 reps en reserva. Cerca del fallo solo en máquinas y aislados."],
+ ["Deload cada 6-8 semanas","Una semana bajá el volumen a la mitad (2 series por ejercicio, mismo peso). El cuerpo se recupera y volvés más fuerte."],
  ["Nutrición","Déficit 300-500 kcal/día · Proteína 1.6-2 g/kg · 8-10 mil pasos diarios."],
  ["Sueño","7+ horas: donde se construye el músculo y se regula el apetito."],
+ ["Extra opcional","Burpees, puños al aire y patadas al final del sábado si sobran minutos. Buen cardio extra, no reemplazan nada."],
  ["Frecuencia","Cada músculo 2 veces por semana. Cardio 4 de 6 días + caminata dominical."]
 ];
 
 function animImg(e,cls){
   return `<div class="anim ${cls||''}">
     <img class="f0" src="${e.i0}" alt="${e.n}" loading="lazy" onerror="this.style.visibility='hidden'">
-    <img class="f1" src="${e.i1}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"></div>`;
+    <img class="f1" src="${e.i1}" alt="${e.n}" loading="lazy" onerror="this.style.visibility='hidden'"></div>`;
 }
 
 const REST_DEFAULT=75;
