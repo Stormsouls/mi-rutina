@@ -165,7 +165,11 @@ body{
 .bigtag .v{font-family:'Barlow Condensed';font-weight:800;font-size:22px;line-height:1;color:var(--text)}
 .bigtag .k{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-weight:700}
 .bigtag.sets .v{color:var(--accent)}
+.bigtag.wt{cursor:pointer}
 .bigtag.wt .v{color:#74b9ff}
+.bigtag.wt .k i{font-size:10px;margin-left:2px}
+.wt-input{width:78px;text-align:center;background:transparent;border:none;border-bottom:2px solid #74b9ff;
+  color:#74b9ff;font-family:'Barlow Condensed';font-weight:800;font-size:22px;line-height:1;padding:0 0 2px;outline:none}
 
 /* series dots */
 .series{display:flex;justify-content:center;gap:10px;margin:18px 0 6px}
@@ -384,6 +388,25 @@ function animImg(e,cls){
 const REST_DEFAULT=75;
 let viewDay, cur=0, restTimer=null, restLeft=0;
 
+// ---- weight overrides (persist per exercise name, shared across days) ----
+let WEIGHTS={};
+try{WEIGHTS=JSON.parse(localStorage.getItem("gymweights")||"{}")}catch(e){WEIGHTS={}}
+function getW(e){return WEIGHTS[e.n]!==undefined?WEIGHTS[e.n]:e.w}
+function setW(name,val){WEIGHTS[name]=val;localStorage.setItem("gymweights",JSON.stringify(WEIGHTS));}
+function editWeight(){
+  if(document.getElementById('wtInput'))return;
+  const e=PLAN[viewDay].ex[cur];
+  const valEl=document.getElementById('wtVal');
+  if(!valEl)return;
+  const current=getW(e);
+  valEl.outerHTML=`<input id="wtInput" class="wt-input" value="${current}">`;
+  const inp=document.getElementById('wtInput');
+  inp.focus();inp.select();
+  const commit=()=>{setW(e.n, inp.value.trim()||current);renderTrain();renderPreview();};
+  inp.addEventListener('blur',commit,{once:true});
+  inp.addEventListener('keydown',ev=>{if(ev.key==='Enter')inp.blur();});
+}
+
 // ---- progress persistence (per ISO date) ----
 function todayKey(){const d=new Date();return d.toISOString().slice(0,10)}
 function loadProg(day){
@@ -462,7 +485,7 @@ function renderPreview(){
       <div class="idx">${i+1}</div>
       <div class="thumb">${animImg(e)}</div>
       <div class="info"><div class="nm">${e.n}</div><div class="mt">
-        <span class="chip2 s">${e.s}×${e.r}</span><span class="chip2 w">${e.w}</span></div></div>
+        <span class="chip2 s">${e.s}×${e.r}</span><span class="chip2 w">${getW(e)}</span></div></div>
     </div>`;
   });
   if(p.extra)html+=`<div class="extra ${p.extra.t}"><span class="ic"><i class="ti ti-${p.extra.ic}"></i></span><span>${p.extra.txt}</span></div>`;
@@ -488,7 +511,7 @@ function renderTrain(){
   document.getElementById('trName').textContent=e.n;
   document.getElementById('trTags').innerHTML=
     `<div class="bigtag sets"><span class="v">${e.s}×${e.r}</span><span class="k">Series</span></div>
-     <div class="bigtag wt"><span class="v">${e.w}</span><span class="k">Carga</span></div>`;
+     <div class="bigtag wt" onclick="editWeight()"><span class="v" id="wtVal">${getW(e)}</span><span class="k">Carga <i class="ti ti-pencil"></i></span></div>`;
   // series dots
   const sc=document.getElementById('series');sc.innerHTML="";
   for(let i=0;i<e.s;i++){
@@ -498,11 +521,12 @@ function renderTrain(){
     dot.onclick=()=>toggleSerie(i);
     sc.appendChild(dot);
   }
-  document.getElementById('prevB').disabled=cur===0;
-  document.getElementById('nextB').textContent=cur===p.ex.length-1?"Terminar ✓":"Siguiente ›";
+  // navegación circular: prev/next nunca se deshabilitan, dan la vuelta al circuito
+  document.getElementById('prevB').disabled=false;
+  document.getElementById('nextB').textContent="Siguiente ›";
 }
 function toggleSerie(i){
-  const e=PLAN[viewDay].ex[cur];
+  const p=PLAN[viewDay];
   // tapping fills up to i+1; tapping the last filled one unfills it
   if(state[cur]===i+1)state[cur]=i; else state[cur]=i+1;
   saveProg();
@@ -510,14 +534,14 @@ function toggleSerie(i){
   renderTrain();
   if(justSet){
     if(navigator.vibrate)navigator.vibrate(18);
-    // auto-offer rest when completing a non-final set
-    if(state[cur]<e.s)startRest();
+    // circuito: al completar una serie, se descansa y se pasa al próximo ejercicio pendiente
+    if(state.every((v,idx)=>v>=p.ex[idx].s)) finishWorkout();
+    else startRest();
   }
 }
 function go(dir){
-  const p=PLAN[viewDay];
-  if(dir>0 && cur===p.ex.length-1){finishWorkout();return;}
-  cur=Math.max(0,Math.min(p.ex.length-1,cur+dir));
+  const p=PLAN[viewDay],n=p.ex.length;
+  cur=(cur+dir+n)%n;
   stopRest();renderTrain();
   document.getElementById('gif').scrollIntoView({block:'nearest'});
 }
@@ -536,8 +560,16 @@ function updateRing(){
   fg.style.strokeDasharray=C;
   fg.style.strokeDashoffset=C*(1-Math.max(0,restLeft)/REST_DEFAULT);
 }
-function endRest(){stopRest();document.getElementById('restOv').classList.remove('on');}
+function endRest(){stopRest();document.getElementById('restOv').classList.remove('on');advanceCircuit();}
 function stopRest(){clearInterval(restTimer);restTimer=null;}
+function advanceCircuit(){
+  const p=PLAN[viewDay];
+  if(state.every((v,i)=>v>=p.ex[i].s)){finishWorkout();return;}
+  const n=p.ex.length;let i=cur;
+  do{i=(i+1)%n;}while((state[i]||0)>=p.ex[i].s);
+  cur=i;renderTrain();
+  document.getElementById('gif').scrollIntoView({block:'nearest'});
+}
 
 function finishWorkout(){
   const p=PLAN[viewDay];
