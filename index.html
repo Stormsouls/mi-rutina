@@ -606,20 +606,26 @@ function updateRing(){
 function endRest(){stopRest();document.getElementById('restOv').classList.remove('on');advanceCircuit();}
 function stopRest(){clearInterval(restTimer);restTimer=null;}
 function advanceCircuit(){
-  const p=PLAN[viewDay];
-  if(state.every((v,i)=>v>=p.ex[i].s)){finishWorkout();return;}
-  const n=p.ex.length;let i=cur;
-  do{i=(i+1)%n;}while((state[i]||0)>=p.ex[i].s);
+  const list=dayEx(viewDay);
+  if(state.every((v,i)=>v>=list[i].s)){finishWorkout();return;}
+  const n=list.length;let i=cur;
+  do{i=(i+1)%n;}while((state[i]||0)>=list[i].s);
   cur=i;renderTrain();
   document.getElementById('gif').scrollIntoView({block:'nearest'});
 }
 
 function finishWorkout(){
-  const p=PLAN[viewDay];
+  const p=PLAN[viewDay],list=dayEx(viewDay);
   const sets=state.reduce((a,b)=>a+b,0);
-  document.getElementById('finEx').textContent=p.ex.length;
+  document.getElementById('finEx').textContent=list.length;
   document.getElementById('finSets').textContent=sets;
-  const allDone=state.every((v,i)=>v>=p.ex[i].s);
+  const allDone=state.every((v,i)=>v>=list[i].s);
+  // solo al terminar del todo avanzamos la rotación (si era la sesión pendiente)
+  if(allDone){
+    const wasPending=viewDay===curSeqDay();
+    clearProg(viewDay);
+    if(wasPending)advanceSeq();
+  }
   document.getElementById('finTitle').textContent=allDone?"¡Entreno completo!":"¡Buen trabajo!";
   document.getElementById('finMsg').textContent=allDone
     ? `${p.title}. Recuperá bien y a por el próximo.`
@@ -628,7 +634,8 @@ function finishWorkout(){
   document.getElementById('finish').classList.add('on');
   confetti();
 }
-function closeFinish(){document.getElementById('finish').classList.remove('on');renderHero();renderPreview();
+function closeFinish(){document.getElementById('finish').classList.remove('on');
+  buildWeek();selectDay(curSeqDay());
   window.scrollTo({top:0,behavior:'smooth'});}
 
 function confetti(){
