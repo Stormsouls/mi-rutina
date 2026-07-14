@@ -464,7 +464,7 @@ const realToday=new Date().getDay();
 function initHome(){
   document.getElementById('todayPill').textContent=DOWFULL[realToday];
   buildWeek();
-  selectDay(realToday);
+  selectDay(curSeqDay());
 }
 function buildWeek(){
   const order=[1,2,3,4,5,6,0];
