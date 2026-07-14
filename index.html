@@ -472,7 +472,7 @@ function buildWeek(){
   order.forEach(d=>{
     const p=PLAN[d];
     const el=document.createElement('div');
-    el.className="day-chip"+(d===realToday?" today":"");
+    el.className="day-chip"+(d===curSeqDay()?" today":"");
     el.style.setProperty('--cc',p.c);
     el.innerHTML=`<div class="dow">${p.dow}</div>
       <div class="dot" style="background:${p.c}22;color:${p.c}"><i class="ti ti-${p.icon}"></i></div>
