@@ -516,17 +516,22 @@ function renderHero(){
 function renderPreview(){
   const p=PLAN[viewDay],pv=document.getElementById('preview');
   if(p.rest){pv.innerHTML="";return}
-  let html=`<div class="pv-title"><span class="tag" style="background:${p.c};color:#0a0a0c">${p.dow}</span>${p.title}</div>`;
-  p.ex.forEach((e,i)=>{
-    html+=`<div class="ex-row" style="animation-delay:${i*.05}s">
-      <div class="idx">${i+1}</div>
+  const list=dayEx(viewDay);
+  let html=`<div class="pv-title"><span class="tag" style="background:${p.c};color:#0a0a0c">${p.dow}</span>${p.title}</div>
+    <div class="pv-hint"><i class="ti ti-arrows-move"></i> Mantené el <i class="ti ti-grip-vertical"></i> y arrastrá para reordenar por cercanía de las máquinas</div>
+    <div id="pvList">`;
+  list.forEach((e,i)=>{
+    html+=`<div class="ex-row" data-pos="${i}" style="animation-delay:${i*.05}s">
+      <div class="handle" data-pos="${i}"><i class="ti ti-grip-vertical"></i><span>${i+1}</span></div>
       <div class="thumb">${animImg(e)}</div>
       <div class="info"><div class="nm">${e.n}</div><div class="mt">
         <span class="chip2 s">${e.s}×${e.r}</span><span class="chip2 w">${getW(e)}</span></div></div>
     </div>`;
   });
+  html+=`</div>`;
   if(p.extra)html+=`<div class="extra ${p.extra.t}"><span class="ic"><i class="ti ti-${p.extra.ic}"></i></span><span>${p.extra.txt}</span></div>`;
   pv.innerHTML=html;
+  bindSort();
 }
 
 // ---------- TRAINING ----------
