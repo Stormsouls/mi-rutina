@@ -127,6 +127,19 @@ body{
 .chip2.s{color:var(--accent);border-color:rgba(232,255,71,.25);background:rgba(232,255,71,.07)}
 .chip2.w{color:#74b9ff;border-color:rgba(116,185,255,.25);background:rgba(116,185,255,.07)}
 .ex-row .idx{font-family:'Barlow Condensed';font-weight:800;font-size:18px;color:var(--muted);width:20px;text-align:center;flex-shrink:0}
+.ex-row .handle{flex-shrink:0;width:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  color:var(--muted);cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;align-self:stretch}
+.ex-row .handle i{font-size:18px;opacity:.7}
+.ex-row .handle span{font-family:'Barlow Condensed';font-weight:800;font-size:15px}
+.ex-row .handle:active{cursor:grabbing;color:var(--accent)}
+.ex-row.drag-src{opacity:.28}
+.ex-row.drag-ghost{position:fixed;z-index:200;margin:0!important;pointer-events:none;
+  box-shadow:0 20px 44px -14px rgba(0,0,0,.7);border-color:var(--accent);
+  animation:none;transform:scale(1.02)}
+.pv-hint{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:11.5px;font-weight:600;color:var(--muted);
+  margin:0 4px 12px;line-height:1.4}
+.pv-hint i{color:var(--accent);font-size:14px}
+#pvList{position:relative}
 .extra{margin-top:6px;border-radius:14px;padding:13px 15px;font-size:13px;font-weight:500;display:flex;gap:10px;align-items:flex-start}
 .extra.cardio{background:rgba(116,185,255,.08);border:1px solid rgba(116,185,255,.2);color:#9ecbff}
 .extra.core{background:rgba(162,155,254,.08);border:1px solid rgba(162,155,254,.2);color:#bcb6ff}
