@@ -569,7 +569,7 @@ function renderTrain(){
   document.getElementById('nextB').textContent="Siguiente ›";
 }
 function toggleSerie(i){
-  const p=PLAN[viewDay];
+  const list=dayEx(viewDay);
   // tapping fills up to i+1; tapping the last filled one unfills it
   if(state[cur]===i+1)state[cur]=i; else state[cur]=i+1;
   saveProg();
@@ -578,12 +578,12 @@ function toggleSerie(i){
   if(justSet){
     if(navigator.vibrate)navigator.vibrate(18);
     // circuito: al completar una serie, se descansa y se pasa al próximo ejercicio pendiente
-    if(state.every((v,idx)=>v>=p.ex[idx].s)) finishWorkout();
+    if(state.every((v,idx)=>v>=list[idx].s)) finishWorkout();
     else startRest();
   }
 }
 function go(dir){
-  const p=PLAN[viewDay],n=p.ex.length;
+  const n=dayEx(viewDay).length;
   cur=(cur+dir+n)%n;
   stopRest();renderTrain();
   document.getElementById('gif').scrollIntoView({block:'nearest'});
