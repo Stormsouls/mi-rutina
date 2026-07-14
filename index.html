@@ -401,6 +401,24 @@ function animImg(e,cls){
 const REST_DEFAULT=75;
 let viewDay, cur=0, restTimer=null, restLeft=0;
 
+// ---- secuencia de rotación (no se salta días: avanza solo al completar) ----
+const SEQ=[1,2,3,4,5,6];               // orden de las sesiones (lun→sáb)
+let seqPos=0;
+try{const s=parseInt(localStorage.getItem("gymseqpos"),10);if(s>=0&&s<SEQ.length)seqPos=s;}catch(e){}
+function curSeqDay(){return SEQ[seqPos];}
+function advanceSeq(){seqPos=(seqPos+1)%SEQ.length;localStorage.setItem("gymseqpos",seqPos);}
+
+// ---- orden personalizado de ejercicios por día (drag & drop) ----
+let ORDER={};
+try{ORDER=JSON.parse(localStorage.getItem("gymorder")||"{}")}catch(e){ORDER={}}
+function dayEx(day){
+  const base=PLAN[day].ex||[];
+  const ord=ORDER[day];
+  if(!Array.isArray(ord)||ord.length!==base.length)return base;
+  const out=ord.map(i=>base[i]).filter(Boolean);
+  return out.length===base.length?out:base;
+}
+
 // ---- weight overrides (persist per exercise name, shared across days) ----
 let WEIGHTS={};
 try{WEIGHTS=JSON.parse(localStorage.getItem("gymweights")||"{}")}catch(e){WEIGHTS={}}
