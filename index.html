@@ -656,6 +656,66 @@ function openNotes(){
 }
 function closeNotes(){document.getElementById('notesModal').classList.remove('on');}
 
+// ---------- DRAG & DROP para reordenar ejercicios ----------
+let dragEl=null,ghost=null,offY=0;
+function bindSort(){
+  const listEl=document.getElementById('pvList');
+  if(!listEl)return;
+  listEl.querySelectorAll('.handle').forEach(h=>{
+    h.addEventListener('pointerdown',onGrab);
+  });
+}
+function onGrab(e){
+  e.preventDefault();
+  const row=e.currentTarget.closest('.ex-row');
+  const listEl=document.getElementById('pvList');
+  if(!row||!listEl)return;
+  dragEl=row;
+  const rect=row.getBoundingClientRect();
+  offY=e.clientY-rect.top;
+  ghost=row.cloneNode(true);
+  ghost.classList.add('drag-ghost');
+  ghost.style.width=rect.width+'px';
+  ghost.style.left=rect.left+'px';
+  ghost.style.top=(e.clientY-offY)+'px';
+  document.body.appendChild(ghost);
+  row.classList.add('drag-src');
+  if(navigator.vibrate)navigator.vibrate(12);
+  document.addEventListener('pointermove',onDrag);
+  document.addEventListener('pointerup',onDrop,{once:true});
+}
+function onDrag(e){
+  if(!dragEl||!ghost)return;
+  ghost.style.top=(e.clientY-offY)+'px';
+  const listEl=document.getElementById('pvList');
+  const rows=[...listEl.querySelectorAll('.ex-row')];
+  const after=rows.find(r=>r!==dragEl && e.clientY < r.getBoundingClientRect().top + r.offsetHeight/2);
+  if(after){if(after!==dragEl.nextSibling)listEl.insertBefore(dragEl,after);}
+  else{if(dragEl!==rows[rows.length-1])listEl.appendChild(dragEl);}
+}
+function onDrop(){
+  document.removeEventListener('pointermove',onDrag);
+  if(ghost){ghost.remove();ghost=null;}
+  if(!dragEl)return;
+  dragEl.classList.remove('drag-src');
+  const listEl=document.getElementById('pvList');
+  const disp=[...listEl.querySelectorAll('.ex-row')].map(r=>+r.dataset.pos);
+  dragEl=null;
+  commitOrder(disp);
+}
+function commitOrder(disp){
+  const day=viewDay,base=PLAN[day].ex;
+  if(!Array.isArray(base))return;
+  const oldOrder=(Array.isArray(ORDER[day])&&ORDER[day].length===base.length)?ORDER[day]:base.map((_,i)=>i);
+  const changed=disp.some((o,i)=>o!==i);
+  ORDER[day]=disp.map(o=>oldOrder[o]);
+  state=disp.map(o=>state[o]||0);
+  localStorage.setItem("gymorder",JSON.stringify(ORDER));
+  saveProg();
+  renderPreview();
+  if(changed&&navigator.vibrate)navigator.vibrate(18);
+}
+
 // swipe in training
 let sx=0;
 const tr=document.getElementById('train');
