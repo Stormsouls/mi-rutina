@@ -438,15 +438,19 @@ function editWeight(){
   inp.addEventListener('keydown',ev=>{if(ev.key==='Enter')inp.blur();});
 }
 
-// ---- progress persistence (per ISO date) ----
-function todayKey(){const d=new Date();return d.toISOString().slice(0,10)}
+// ---- progreso persistente por día (se mantiene hasta completar la sesión) ----
 function loadProg(day){
   try{const r=JSON.parse(localStorage.getItem("gymprog")||"{}");
-    if(r.date!==todayKey()||r.day!==day)return null;return r.done}catch(e){return null}
+    const a=r[day];return Array.isArray(a)?a:null;}catch(e){return null}
 }
 function saveProg(){
-  const done=PLAN[viewDay].ex.map((e,i)=>state[i]||0);
-  localStorage.setItem("gymprog",JSON.stringify({date:todayKey(),day:viewDay,done}));
+  try{const r=JSON.parse(localStorage.getItem("gymprog")||"{}");
+    r[viewDay]=dayEx(viewDay).map((e,i)=>state[i]||0);
+    localStorage.setItem("gymprog",JSON.stringify(r));}catch(e){}
+}
+function clearProg(day){
+  try{const r=JSON.parse(localStorage.getItem("gymprog")||"{}");
+    delete r[day];localStorage.setItem("gymprog",JSON.stringify(r));}catch(e){}
 }
 let state=[];
 
