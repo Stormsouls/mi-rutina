@@ -536,17 +536,18 @@ function renderPreview(){
 
 // ---------- TRAINING ----------
 function startTrain(){
-  cur=state.findIndex((v,i)=>v<PLAN[viewDay].ex[i].s);
+  const list=dayEx(viewDay);
+  cur=state.findIndex((v,i)=>v<list[i].s);
   if(cur<0)cur=0;
   document.getElementById('train').classList.add('on');
   renderTrain();
 }
 function exitTrain(){document.getElementById('train').classList.remove('on');stopRest();renderHero();renderPreview();}
 function renderTrain(){
-  const p=PLAN[viewDay],e=p.ex[cur];
-  document.getElementById('count').textContent=`${cur+1}/${p.ex.length}`;
+  const list=dayEx(viewDay),e=list[cur];
+  document.getElementById('count').textContent=`${cur+1}/${list.length}`;
   // bars
-  document.getElementById('bars').innerHTML=p.ex.map((x,i)=>{
+  document.getElementById('bars').innerHTML=list.map((x,i)=>{
     const full=state[i]>=x.s;return `<i class="${full?'done':(i===cur?'cur':'')}"></i>`}).join("");
   // gif
   document.getElementById('gif').innerHTML=`<span class="badge">Ejercicio ${cur+1}</span>`+animImg(e,'big');
