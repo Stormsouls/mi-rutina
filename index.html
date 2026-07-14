@@ -426,7 +426,7 @@ function getW(e){return WEIGHTS[e.n]!==undefined?WEIGHTS[e.n]:e.w}
 function setW(name,val){WEIGHTS[name]=val;localStorage.setItem("gymweights",JSON.stringify(WEIGHTS));}
 function editWeight(){
   if(document.getElementById('wtInput'))return;
-  const e=PLAN[viewDay].ex[cur];
+  const e=dayEx(viewDay)[cur];
   const valEl=document.getElementById('wtVal');
   if(!valEl)return;
   const current=getW(e);
