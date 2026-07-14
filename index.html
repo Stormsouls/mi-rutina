@@ -487,25 +487,27 @@ function selectDay(d){
 }
 function renderHero(){
   const p=PLAN[viewDay],h=document.getElementById('hero');
-  const isToday=viewDay===realToday;
+  const isPending=viewDay===curSeqDay();
   if(p.rest){
-    h.innerHTML=`<div class="hero-eyebrow">${isToday?"Hoy":p.dow} · descanso</div>
+    h.innerHTML=`<div class="hero-eyebrow">${viewDay===realToday?"Hoy":p.dow} · descanso</div>
       <h1>DÍA DE<br>DESCANSO</h1>
       <p class="focus">Recuperación total. Ideal: caminata de 30-45 min y buena hidratación.</p>
       <button class="cta rest"><span>Sin entrenamiento</span></button>`;
     return;
   }
-  state=loadProg(viewDay)||p.ex.map(()=>0);
-  const totalSets=p.ex.reduce((a,e)=>a+e.s,0);
+  const list=dayEx(viewDay);
+  state=loadProg(viewDay);
+  if(!state||state.length!==list.length)state=list.map(()=>0);
+  const totalSets=list.reduce((a,e)=>a+e.s,0);
   const doneSets=state.reduce((a,b)=>a+b,0);
   const pct=Math.round(doneSets/totalSets*100);
-  h.innerHTML=`<div class="hero-eyebrow">${isToday?"Tu entreno de hoy":p.dow}</div>
+  h.innerHTML=`<div class="hero-eyebrow">${isPending?"Tu entreno pendiente":p.dow}</div>
     <h1>${p.label.toUpperCase()}</h1>
     <p class="focus">${p.title}</p>
     <div class="hero-stats">
-      <div class="hstat"><div class="n">${p.ex.length}</div><div class="l">Ejercicios</div></div>
+      <div class="hstat"><div class="n">${list.length}</div><div class="l">Ejercicios</div></div>
       <div class="hstat"><div class="n">${totalSets}</div><div class="l">Series</div></div>
-      <div class="hstat"><div class="n">~${p.ex.length*9+15}'</div><div class="l">Duración</div></div>
+      <div class="hstat"><div class="n">~${list.length*9+15}'</div><div class="l">Duración</div></div>
     </div>
     <button class="cta" onclick="startTrain()"><span>${doneSets>0?"Continuar":"Empezar"}</span><span class="arrow">→</span></button>
     <div class="prog-line" style="${doneSets>0?'display:block':''}"><i style="width:${pct}%"></i></div>
