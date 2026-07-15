@@ -349,8 +349,9 @@ const PLAN={
         ex("Face pull","Face_Pull",3,"15","36 kg"),
         ex("Curl bíceps con barra","Barbell_Curl",3,"10","12.5 kg"),
         ex("Curl de muñeca palmas arriba","Palms-Up_Dumbbell_Wrist_Curl_Over_A_Bench",3,"15-20","a probar"),
-        ex("Curl de muñeca palmas abajo","Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench",3,"15-20","a probar")],
-    extra:{t:"core",ic:"flame",txt:"<b>Core:</b> Plancha 3×40s · Twist ruso 3×20 · Elev. piernas 3×15"}},
+        ex("Curl de muñeca palmas abajo","Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench",3,"15-20","a probar"),
+        ex("Plancha","Plank",3,"40 seg","Corporal"),
+        ex("Twist ruso","Russian_Twist",3,"20","a probar")]},
  3:{dow:"MIÉ",label:"Hombros y Brazos",title:"Hombros y Brazos",c:"#a29bfe",icon:"barbell",
     ex:[ex("Press deltoides máquina","Leverage_Shoulder_Press",4,"8-10","23 kg"),
         ex("Laterales con mancuerna","Side_Lateral_Raise",4,"12-15","12.5 kg"),
@@ -359,8 +360,10 @@ const PLAN={
         ex("Extensión tríceps cuerda","Triceps_Pushdown_-_Rope_Attachment",4,"10-12","a probar"),
         ex("Fondos en banco","Bench_Dips",3,"12","Corporal"),
         ex("Curl de muñeca palmas arriba","Palms-Up_Dumbbell_Wrist_Curl_Over_A_Bench",3,"15-20","a probar"),
-        ex("Curl de muñeca palmas abajo","Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench",3,"15-20","a probar")],
-    extra:{t:"core",ic:"flame",txt:"<b>Core:</b> Plancha 3×40s · Rueda abdominal 3×12 · Elev. piernas 3×15"}},
+        ex("Curl de muñeca palmas abajo","Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench",3,"15-20","a probar"),
+        ex("Rueda abdominal","Ab_Roller",3,"12","Corporal"),
+        ex("Elevación de piernas colgado","Hanging_Leg_Raise",3,"12","Corporal")],
+    extra:{t:"cardio",ic:"bike",txt:"<b>Cardio:</b> Bici 10 min suave"}},
  4:{dow:"JUE",label:"Empuje B",title:"Empuje B — Hombros",c:"#fdcb6e",icon:"barbell",
     ex:[ex("Press deltoides máquina","Leverage_Shoulder_Press",4,"8-10","23 kg"),
         ex("Laterales con mancuerna","Side_Lateral_Raise",4,"12-15","12.5 kg"),
@@ -377,8 +380,9 @@ const PLAN={
         ex("Curl martillo","Hammer_Curls",3,"12","a probar"),
         ex("Hiperextensiones lumbares","Hyperextensions_Back_Extensions",3,"12","Corporal"),
         ex("Curl de muñeca palmas arriba","Palms-Up_Dumbbell_Wrist_Curl_Over_A_Bench",3,"15-20","a probar"),
-        ex("Curl de muñeca palmas abajo","Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench",3,"15-20","a probar")],
-    extra:{t:"core",ic:"flame",txt:"<b>Core:</b> Plancha lat. 3×30s · Crunch 3×20 · Mountain climbers 3×30s"}},
+        ex("Curl de muñeca palmas abajo","Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench",3,"15-20","a probar"),
+        ex("Plancha lateral","Side_Bridge",3,"30 seg c/lado","Corporal"),
+        ex("Crunch en polea","Cable_Crunch",3,"15","a probar")]},
  6:{dow:"SÁB",label:"Piernas",title:"Piernas — Completo",c:"#fd79a8",icon:"run",
     ex:[ex("Sentadilla","Goblet_Squat",4,"8-10","20 kg c/lado"),
         ex("Peso muerto rumano","Romanian_Deadlift",3,"10","22.5 kg"),
@@ -402,7 +406,8 @@ const NOTES=[
  ["Nutrición","Déficit 300-500 kcal/día · Proteína 1.6-2 g/kg · 8-10 mil pasos diarios."],
  ["Sueño","7+ horas: donde se construye el músculo y se regula el apetito."],
  ["Extra opcional","Burpees, puños al aire y patadas al final del sábado si sobran minutos. Buen cardio extra, no reemplazan nada."],
- ["Prioridad tren superior","Rutina sesgada a torso, espalda, hombros y brazos: 5 días de tren superior (pecho, espalda ancha, hombros/brazos, hombros, espalda densa) y 1 solo día de piernas completo (sábado). Pecho/espalda/hombros 2× por semana; piernas 1× intenso. Cardio 4 de 6 días + caminata dominical."]
+ ["Prioridad tren superior","Rutina sesgada a torso, espalda, hombros y brazos: 5 días de tren superior (pecho, espalda ancha, hombros/brazos, hombros, espalda densa) y 1 solo día de piernas completo (sábado). Pecho/espalda/hombros 2× por semana; piernas 1× intenso. Cardio 4 de 6 días + caminata dominical."],
+ ["Core (mar · mié · vie)","Ya no es una nota suelta: son ejercicios reales con series que marcás. 2 por día, 3 días por semana, cubriendo las 4 funciones del core — anti-extensión (plancha, rueda), rotación (twist ruso), abs inferiores (elevación de piernas) y anti-flexión lateral (plancha lateral). El crunch en polea es el único con carga progresiva: subile peso como a cualquier otro ejercicio."]
 ];
 
 function animImg(e,cls){
@@ -520,7 +525,7 @@ function renderHero(){
     <div class="hero-stats">
       <div class="hstat"><div class="n">${list.length}</div><div class="l">Ejercicios</div></div>
       <div class="hstat"><div class="n">${totalSets}</div><div class="l">Series</div></div>
-      <div class="hstat"><div class="n">~${list.length*9+15}'</div><div class="l">Duración</div></div>
+      <div class="hstat"><div class="n">~${Math.round(totalSets*2+10)}'</div><div class="l">Duración</div></div>
     </div>
     <button class="cta" onclick="startTrain()"><span>${doneSets>0?"Continuar":"Empezar"}</span><span class="arrow">→</span></button>
     <div class="prog-line" style="${doneSets>0?'display:block':''}"><i style="width:${pct}%"></i></div>
