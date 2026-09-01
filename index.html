@@ -300,7 +300,7 @@ body{
   <div class="ring">
     <svg viewBox="0 0 240 240"><circle class="bg" cx="120" cy="120" r="108" fill="none" stroke-width="14"/>
     <circle class="fg" id="ringFg" cx="120" cy="120" r="108" fill="none" stroke-width="14"/></svg>
-    <div class="t" id="restT">75</div>
+    <div class="t" id="restT">120</div>
   </div>
   <div class="rest-actions">
     <button class="ra" onclick="addRest(15)">+15s</button>
@@ -399,7 +399,8 @@ const NOTES=[
  ["Estructura diaria","5 min bici suave + movilidad de hombros/cadera → fuerza ~40 min → cardio o core ~10-15 min. Total ≤ 60 min."],
  ["Series de aproximación","Antes del primer ejercicio pesado del día (press, sentadilla, peso muerto, remo): 1-2 series livianas con la mitad del peso. A los 38 protege articulaciones."],
  ["Tempo controlado","Bajá el peso en 2-3 s (fase excéntrica) sin impulso. Más músculo con menos peso y menos desgaste articular."],
- ["Descanso entre series","60-90 segundos. Domingo: descanso total (ideal caminata 30-45 min)."],
+ ["Intensidad: cerca del fallo, no siempre al fallo","La mayoría de las series dejá 1-2 repeticiones en recámara (RIR 1-2): estimula casi lo mismo que el fallo con mucha menos fatiga. Reservá el fallo (o pasarlo con una serie descendente) para la ÚLTIMA serie de un ejercicio. Ir al fallo en todas las series desde la primera te vacía el entreno. El error más común de la gente que no progresa es lo contrario: quedarse lejos del fallo, con un peso demasiado liviano."],
+ ["Descanso entre series","2-3 minutos en los básicos pesados (press, sentadilla, peso muerto, remo, jalón) y 90 s-2 min en los aislados. La ciencia es clara: con menos de 2 min necesitás MÁS series para el mismo músculo. El timer arranca en 2 min por defecto. Domingo: descanso total (ideal caminata 30-45 min)."],
  ["Progresión","Cuando llegues al tope de reps en TODAS las series con buena técnica, subí 2.5-5 kg y volvé al rango bajo. La última serie debe costarte: si sobran 4+ reps, falta peso."],
  ["Sentadilla y peso muerto","Primeros 2 meses: NO al fallo, dejá siempre 2 reps en reserva. Cerca del fallo solo en máquinas y aislados."],
  ["Deload cada 6-8 semanas","Una semana bajá el volumen a la mitad (2 series por ejercicio, mismo peso). El cuerpo se recupera y volvés más fuerte."],
@@ -416,7 +417,7 @@ function animImg(e,cls){
     <img class="f1" src="${e.i1}" alt="${e.n}" loading="lazy" onerror="this.style.visibility='hidden'"></div>`;
 }
 
-const REST_DEFAULT=75;
+const REST_DEFAULT=120;
 let viewDay, cur=0, restTimer=null, restLeft=0;
 
 // ---- secuencia de rotación (no se salta días: avanza solo al completar) ----
