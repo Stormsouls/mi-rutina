@@ -522,6 +522,7 @@ function renderHero(){
   const list=dayEx(viewDay);
   state=loadProg(viewDay);
   if(!state||state.length!==list.length)state=list.map(()=>0);
+  state=state.map((v,i)=>Math.min(v,list[i].s));
   const totalSets=list.reduce((a,e)=>a+e.s,0);
   const doneSets=state.reduce((a,b)=>a+b,0);
   const pct=Math.round(doneSets/totalSets*100);
